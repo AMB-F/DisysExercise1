@@ -1,0 +1,517 @@
+---
+swagger: "2.0"
+info:
+  description: "Hello!!!"
+  version: "1.0.0"
+  title: "ITU Data"
+  contact:
+    email: "alpha@bravo.charlie"
+host: "api.itu.dk"
+basePath: "/v2"
+tags:
+- name: "student"
+  description: "Everything about students"
+- name: "course"
+  description: "Everything about courses"
+- name: "teacher"
+  description: "Everything about teachers"
+schemes:
+- "http"
+paths:
+  /student:
+    post:
+      tags:
+      - "student"
+      description: "Create a new student"
+      parameters:
+      - in: "body"
+        name: "newStudent"
+        description: "The name of the new student"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+        x-exportParamName: "NewStudent"
+      responses:
+        "200":
+          description: "The new student"
+          schema:
+            $ref: "#/definitions/Student"
+  /student/{studentId}:
+    get:
+      tags:
+      - "student"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to look up"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      responses:
+        "200":
+          description: "Get information about the given student"
+          schema:
+            $ref: "#/definitions/Student"
+        "404":
+          description: "Student does not exist"
+    put:
+      tags:
+      - "student"
+      description: "Update a student's main info"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - in: "body"
+        name: "updatedFields"
+        description: "The fields to update. You only need to add the fields that need\
+          \ updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            initials:
+              type: "string"
+        x-exportParamName: "UpdatedFields"
+      responses:
+        "200":
+          description: "The deleted student"
+          schema:
+            $ref: "#/definitions/Student"
+        "406":
+          description: "Request value was not valid"
+    delete:
+      tags:
+      - "student"
+      description: "Delete a student"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      responses:
+        "200":
+          description: "The deleted student"
+          schema:
+            $ref: "#/definitions/Student"
+        "404":
+          description: "Student does not exist"
+  /student/{studentId}/enroll/{courseId}:
+    post:
+      tags:
+      - "student"
+      description: "Enroll a student in a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to enroll"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course to enroll the student in"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "The course enrollment"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+    delete:
+      tags:
+      - "student"
+      description: "Unenroll a student from a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to unenroll from the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course to unenroll the student from"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "Get information about the given student"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+  /student/{studentId}/workload/{courseId}:
+    put:
+      tags:
+      - "student"
+      description: "Update a student's workload in a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "The updated course enrollment"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+  /student/{studentId}/rate/course/{courseId}:
+    post:
+      tags:
+      - "student"
+      description: "Rate a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      - in: "body"
+        name: "rating"
+        description: "The rating"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            rating:
+              type: "number"
+        x-exportParamName: "Rating"
+      responses:
+        "200":
+          description: "The modified course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Student or course does not exist"
+  /course:
+    post:
+      tags:
+      - "course"
+      description: "Create a new course"
+      parameters:
+      - in: "body"
+        name: "newCourse"
+        description: "The new course"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            expectedWorkload:
+              type: "integer"
+              description: "Expected workload in hours per week"
+        x-exportParamName: "NewCourse"
+      responses:
+        "200":
+          description: "The new course"
+          schema:
+            $ref: "#/definitions/Course"
+  /course/{courseId}:
+    get:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "Get information about the given course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Course does not exist"
+    put:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      - in: "body"
+        name: "updatedFields"
+        description: "The fields to update. You only need to add the fields that need\
+          \ updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            expectedWorkload:
+              type: "number"
+        x-exportParamName: "UpdatedFields"
+      responses:
+        "200":
+          description: "The deleted course"
+          schema:
+            $ref: "#/definitions/Course"
+        "406":
+          description: "Request value was not valid"
+    delete:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        required: true
+        type: "integer"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "The deleted course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Course does not exist"
+  /teacher:
+    post:
+      tags:
+      - "teacher"
+      description: "Create a new teacher"
+      parameters:
+      - in: "body"
+        name: "newTeacher"
+        description: "The name of the new teacher"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            courses:
+              type: "array"
+              description: "List of course id that the given teacher is teaching"
+              items:
+                type: "integer"
+        x-exportParamName: "NewTeacher"
+      responses:
+        "200":
+          description: "The new student"
+          schema:
+            $ref: "#/definitions/Student"
+  /teacher/{teacherId}:
+    get:
+      tags:
+      - "teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher to look up"
+        required: true
+        type: "integer"
+        x-exportParamName: "TeacherId"
+      responses:
+        "200":
+          description: "Get information about the given teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Teacher does not exist"
+    put:
+      tags:
+      - "teacher"
+      description: "Update a teacher's main info"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        required: true
+        type: "integer"
+        x-exportParamName: "TeacherId"
+      - in: "body"
+        name: "updatedFields"
+        description: "The fields to update. You only need to add the fields that need\
+          \ updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            initials:
+              type: "string"
+        x-exportParamName: "UpdatedFields"
+      responses:
+        "200":
+          description: "The deleted teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "406":
+          description: "Request value was not valid"
+    delete:
+      tags:
+      - "teacher"
+      description: "Delete a teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        required: true
+        type: "integer"
+        x-exportParamName: "TeacherId"
+      responses:
+        "200":
+          description: "The deleted teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Teacher does not exist"
+  /student/{studentId}/rate/teacher/{teacherId}:
+    post:
+      tags:
+      - "teacher"
+      description: "Rate a teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        required: true
+        type: "integer"
+        x-exportParamName: "TeacherId"
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        required: true
+        type: "integer"
+        x-exportParamName: "StudentId"
+      - in: "body"
+        name: "rating"
+        description: "The rating"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            rating:
+              type: "number"
+        x-exportParamName: "Rating"
+      responses:
+        "200":
+          description: "The modified teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Student or course does not exist"
+definitions:
+  Student:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      initials:
+        type: "string"
+      name:
+        type: "string"
+      enrollments:
+        type: "array"
+        items:
+          $ref: "#/definitions/EnrolledCourse"
+    example:
+      initials: "initials"
+      name: "name"
+      id: 0
+      enrollments:
+      - courseName: "courseName"
+        workload: 1
+        courseId: 6
+      - courseName: "courseName"
+        workload: 1
+        courseId: 6
+  Teacher:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      courses:
+        type: "array"
+        items:
+          type: "integer"
+      rating:
+        type: "number"
+    example:
+      courses:
+      - 6
+      - 6
+      name: "name"
+      rating: 1.46581298050294517310021547018550336360931396484375
+      id: 0
+  EnrolledCourse:
+    type: "object"
+    properties:
+      courseId:
+        type: "integer"
+      courseName:
+        type: "string"
+      workload:
+        type: "integer"
+        description: "Hours worked each week"
+    example:
+      courseName: "courseName"
+      workload: 1
+      courseId: 6
+  Course:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      expectedWorkload:
+        type: "integer"
+        description: "Expected amount of hours per week to work"
+      rating:
+        type: "number"
+        description: "Decimal number from 1-5"
+    example:
+      name: "name"
+      rating: 1.46581298050294517310021547018550336360931396484375
+      id: 0
+      expectedWorkload: 6
