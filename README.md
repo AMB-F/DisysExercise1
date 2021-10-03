@@ -8,7 +8,7 @@ Group name: *Point of Go return*
 - Joachim Borup (aljb@itu.dk)
 
 ## Server
-To run the server, ènter the `server` folder and run `go run .`.
+To run the server, enter the `server` folder and run `go run .`. The server will then be listening at `localhost:8080`.
 
 Note: the server does not contain actual business logic - i.e. the requests don't actually do anything. It's just a constant response.
 
