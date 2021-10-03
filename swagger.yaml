@@ -1,12 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Hello!!!"
   version: "1.0.0"
   title: "ITU Data"
-  contact:
-    email: "alpha@bravo.charlie"
-host: "api.itu.dk"
-basePath: "/v2"
+basePath: "/"
 
 tags:
 - name: "student"
@@ -202,6 +198,38 @@ paths:
             $ref: "#/definitions/Course"
         "404":
           description: "Student or course does not exist"
+  /student/{studentId}/rate/teacher/{teacherId}:
+    post:
+      tags:
+      - "student"
+      description: "Rate a teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        type: "integer"
+        required: true
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      - name: "rating"
+        in: "body"
+        description: "The rating"
+        schema:
+          type: "object"
+          properties:
+            rating:
+              type: "number"
+        required: true
+      responses:
+        "200":
+          description: "The modified teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Student or course does not exist"
 
   
   /course:
@@ -375,38 +403,6 @@ paths:
             $ref: "#/definitions/Teacher"
         "406":
           description: "Request value was not valid"
-  /student/{studentId}/rate/teacher/{teacherId}:
-    post:
-      tags:
-      - "teacher"
-      description: "Rate a teacher"
-      parameters:
-      - name: "teacherId"
-        in: "path"
-        description: "The ID of the teacher"
-        type: "integer"
-        required: true
-      - name: "studentId"
-        in: "path"
-        description: "The ID of the student"
-        type: "integer"
-        required: true
-      - name: "rating"
-        in: "body"
-        description: "The rating"
-        schema:
-          type: "object"
-          properties:
-            rating:
-              type: "number"
-        required: true
-      responses:
-        "200":
-          description: "The modified teacher"
-          schema:
-            $ref: "#/definitions/Teacher"
-        "404":
-          description: "Student or course does not exist"
 
 definitions:
   Student:
