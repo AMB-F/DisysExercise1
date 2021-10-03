@@ -52,35 +52,35 @@ var routes = Routes{
 	Route{
 		"Index",
 		"GET",
-		"/v2/",
+		"/",
 		Index,
 	},
 
 	Route{
 		"CourseCourseIdDelete",
 		strings.ToUpper("Delete"),
-		"/v2/course/{courseId}",
+		"/course/{courseId}",
 		CourseCourseIdDelete,
 	},
 
 	Route{
 		"CourseCourseIdGet",
 		strings.ToUpper("Get"),
-		"/v2/course/{courseId}",
+		"/course/{courseId}",
 		CourseCourseIdGet,
 	},
 
 	Route{
 		"CourseCourseIdPut",
 		strings.ToUpper("Put"),
-		"/v2/course/{courseId}",
+		"/course/{courseId}",
 		CourseCourseIdPut,
 	},
 
 	Route{
 		"CoursePost",
 		strings.ToUpper("Post"),
-		"/v2/course",
+		"/course",
 		CoursePost,
 	},
 }
