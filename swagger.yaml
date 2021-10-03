@@ -1,0 +1,470 @@
+swagger: "2.0"
+info:
+  description: "Hello!!!"
+  version: "1.0.0"
+  title: "ITU Data"
+  contact:
+    email: "alpha@bravo.charlie"
+host: "api.itu.dk"
+basePath: "/v2"
+
+tags:
+- name: "student"
+  description: "Everything about students"
+- name: "course"
+  description: "Everything about courses"
+- name: "teacher"
+  description: "Everything about teachers"
+
+schemes:
+- "http"
+
+paths:
+  /student:
+    post:
+      tags:
+      - "student"
+      description: "Create a new student"
+      parameters:
+      - name: "newStudent"
+        in: "body"
+        description: "The name of the new student"
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+        required: true
+      responses:
+        "200":
+          description: "The new student"
+          schema:
+            $ref: "#/definitions/Student"
+  /student/{studentId}:
+    get:
+      tags:
+      - "student"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to look up"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "Get information about the given student"
+          schema:
+            $ref: "#/definitions/Student"
+        "404":
+          description: "Student does not exist"
+    delete:
+      tags:
+      - "student"
+      description: "Delete a student"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The deleted student"
+          schema:
+            $ref: "#/definitions/Student"
+        "404":
+          description: "Student does not exist"
+    put:
+      tags:
+      - "student"
+      description: "Update a student's main info"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      - name: "updatedFields"
+        in: "body"
+        description: "The fields to update. You only need to add the fields that need updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            initials:
+              type: "string"
+      responses:
+        "200":
+          description: "The deleted student"
+          schema:
+            $ref: "#/definitions/Student"
+        "406":
+          description: "Request value was not valid"
+  /student/{studentId}/enroll/{courseId}:
+    post:
+      tags:
+      - "student"
+      description: "Enroll a student in a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to enroll"
+        type: "integer"
+        required: true
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course to enroll the student in"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The course enrollment"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+    delete:
+      tags:
+      - "student"
+      description: "Unenroll a student from a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student to unenroll from the course"
+        type: "integer"
+        required: true
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course to unenroll the student from"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "Get information about the given student"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+  /student/{studentId}/workload/{courseId}:
+    put:
+      tags:
+      - "student"
+      description: "Update a student's workload in a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The updated course enrollment"
+          schema:
+            $ref: "#/definitions/EnrolledCourse"
+        "404":
+          description: "Student or course does not exist"
+  /student/{studentId}/rate/course/{courseId}:
+    post:
+      tags:
+      - "student"
+      description: "Rate a course"
+      parameters:
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      - name: "rating"
+        in: "body"
+        description: "The rating"
+        schema:
+          type: "object"
+          properties:
+            rating:
+              type: "number"
+        required: true
+      responses:
+        "200":
+          description: "The modified course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Student or course does not exist"
+
+  
+  /course:
+    post:
+      tags:
+      - "course"
+      description: "Create a new course"
+      parameters:
+      - name: "newCourse"
+        in: "body"
+        description: "The new course"
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            expectedWorkload:
+              type: "integer"
+              description: "Expected workload in hours per week"
+        required: true
+      responses:
+        "200":
+          description: "The new course"
+          schema:
+            $ref: "#/definitions/Course"
+  /course/{courseId}:
+    get:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "Get information about the given course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Course does not exist"
+    delete:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The deleted course"
+          schema:
+            $ref: "#/definitions/Course"
+        "404":
+          description: "Course does not exist"
+    put:
+      tags:
+      - "course"
+      parameters:
+      - name: "courseId"
+        in: "path"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      - name: "updatedFields"
+        in: "body"
+        description: "The fields to update. You only need to add the fields that need updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            expectedWorkload:
+              type: "number"
+      responses:
+        "200":
+          description: "The deleted course"
+          schema:
+            $ref: "#/definitions/Course"
+        "406":
+          description: "Request value was not valid"
+  /teacher:
+    post:
+      tags:
+      - "teacher"
+      description: "Create a new teacher"
+      parameters:
+      - name: "newTeacher"
+        in: "body"
+        description: "The name of the new teacher"
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            courses:
+              description: "List of course id that the given teacher is teaching"
+              type: "array"
+              items: 
+                type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The new student"
+          schema:
+            $ref: "#/definitions/Student"
+            
+  /teacher/{teacherId}:
+    get:
+      tags:
+      - "teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher to look up"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "Get information about the given teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Teacher does not exist"
+    delete:
+      tags:
+      - "teacher"
+      description: "Delete a teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        type: "integer"
+        required: true
+      responses:
+        "200":
+          description: "The deleted teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Teacher does not exist"
+    put:
+      tags:
+      - "teacher"
+      description: "Update a teacher's main info"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        type: "integer"
+        required: true
+      - name: "updatedFields"
+        in: "body"
+        description: "The fields to update. You only need to add the fields that need updating."
+        required: true
+        schema:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            initials:
+              type: "string"
+      responses:
+        "200":
+          description: "The deleted teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "406":
+          description: "Request value was not valid"
+  /student/{studentId}/rate/teacher/{teacherId}:
+    post:
+      tags:
+      - "teacher"
+      description: "Rate a teacher"
+      parameters:
+      - name: "teacherId"
+        in: "path"
+        description: "The ID of the teacher"
+        type: "integer"
+        required: true
+      - name: "studentId"
+        in: "path"
+        description: "The ID of the student"
+        type: "integer"
+        required: true
+      - name: "rating"
+        in: "body"
+        description: "The rating"
+        schema:
+          type: "object"
+          properties:
+            rating:
+              type: "number"
+        required: true
+      responses:
+        "200":
+          description: "The modified teacher"
+          schema:
+            $ref: "#/definitions/Teacher"
+        "404":
+          description: "Student or course does not exist"
+
+definitions:
+  Student:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      initials:
+        type: "string"
+      name:
+        type: "string"
+      enrollments:
+        type: "array"
+        items:
+          $ref: "#/definitions/EnrolledCourse"
+  Teacher:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      courses:
+        type: "array"
+        items:
+          type: "integer" # course id's
+      rating:
+        type: "number"
+        
+      
+          
+  EnrolledCourse:
+    type: "object"
+    properties:
+      courseId:
+        type: "integer"
+      courseName:
+        type: "string"
+      workload:
+        type: "integer"
+        description: "Hours worked each week"
+        
+  Course:
+    type: "object"
+    required:
+    - "id"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      expectedWorkload:
+        type: "integer"
+        description: "Expected amount of hours per week to work"
+      rating:
+        type: "number"
+        description: "Decimal number from 1-5"
