@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+option go_package = "github.com/AMB-F/DisysExercise1/gRPC";
+
+package DisysExercisegRPC;
+
+
+service DisysExercisegRPC {
+    rpc NewCourse(google.protobuf.Empty) returns (CourseReply) {}
+
+    rpc GetCourse(CourseRequest) returns (CourseReply) {}
+
+    rpc DeleteCourse(CourseRequest) returns (CourseReply) {}
+
+    rpc EditCourse(CourseRequest) returns (CourseReply) {}
+}
+
+// Data transfer object: carries changes to a given course by id
+message CourseDTO {
+    int32 id                            = 1;
+    string name                         = 2;
+    int32 expectedWorkload              = 3;
+    float rating                        = 4;
+}
+
+// Message that is always sent back to the client
+message CourseReply {
+    enum ReplyType {
+        OK                              = 0;
+        DELETED                         = 1;
+        ERROR                           = 2;
+    }
+
+    ReplyType replyType                 = 1;
+    int32 id                            = 2;
+    string name                         = 3;
+    int32 expectedWorkload              = 4;
+    float rating                        = 5;
+}
+
+
+// Message format that is always sent to the server
+message CourseRequest {
+    enum Action {
+        POST                            = 0;
+        GET                             = 1;
+        DELETE                          = 2;
+        PUT                             = 3;
+    }
+
+    Action action                       = 1;
+    optional int32 courseId             = 2;
+    optional CourseDTO newCourseState   = 3;
+}
