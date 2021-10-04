@@ -1,12 +1,12 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-option go_package = "github.com/AMB-F/DisysExercise1/gRPC";
+option go_package = "DisysExercise1/gRPC/service";
 
-package DisysExercisegRPC;
+package service;
 
 
-service DisysExercisegRPC {
+service service {
     rpc NewCourse(google.protobuf.Empty) returns (CourseReply) {}
 
     rpc GetCourse(CourseRequest) returns (CourseReply) {}
