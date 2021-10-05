@@ -4,10 +4,10 @@ package service
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	NewCourse(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CourseReply, error)
+	NewCourse(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CourseReply, error)
 	GetCourse(ctx context.Context, in *CourseRequest, opts ...grpc.CallOption) (*CourseReply, error)
 	DeleteCourse(ctx context.Context, in *CourseRequest, opts ...grpc.CallOption) (*CourseReply, error)
 	EditCourse(ctx context.Context, in *CourseRequest, opts ...grpc.CallOption) (*CourseReply, error)
@@ -33,7 +33,7 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) NewCourse(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CourseReply, error) {
+func (c *serviceClient) NewCourse(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CourseReply, error) {
 	out := new(CourseReply)
 	err := c.cc.Invoke(ctx, "/service.service/NewCourse", in, out, opts...)
 	if err != nil {
@@ -73,7 +73,7 @@ func (c *serviceClient) EditCourse(ctx context.Context, in *CourseRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	NewCourse(context.Context, *emptypb.Empty) (*CourseReply, error)
+	NewCourse(context.Context, *empty.Empty) (*CourseReply, error)
 	GetCourse(context.Context, *CourseRequest) (*CourseReply, error)
 	DeleteCourse(context.Context, *CourseRequest) (*CourseReply, error)
 	EditCourse(context.Context, *CourseRequest) (*CourseReply, error)
@@ -84,7 +84,7 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) NewCourse(context.Context, *emptypb.Empty) (*CourseReply, error) {
+func (UnimplementedServiceServer) NewCourse(context.Context, *empty.Empty) (*CourseReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NewCourse not implemented")
 }
 func (UnimplementedServiceServer) GetCourse(context.Context, *CourseRequest) (*CourseReply, error) {
@@ -110,7 +110,7 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 }
 
 func _Service_NewCourse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(empty.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func _Service_NewCourse_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/service.service/NewCourse",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).NewCourse(ctx, req.(*emptypb.Empty))
+		return srv.(ServiceServer).NewCourse(ctx, req.(*empty.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,5 +206,5 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "service.proto",
+	Metadata: "service/service.proto",
 }

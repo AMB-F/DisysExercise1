@@ -77,3 +77,38 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ```bash
 protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative service.proto
 ```
+
+## Running gRPC with Docker
+### Build the image
+Build the docker image inside the `gRPC` folder with
+```
+docker build -t gogrpc .
+```
+
+### Run the container
+To spin up the container, run:
+```bash
+# unix
+docker run -it --rm -v "$(pwd)":/app gogrpc bash
+# windows
+docker run -it --rm -v ${pwd}:/app gogrpc bash
+```
+This assumes that you are in the `gRPC` folder! Note, if your path has spaces, it may very well not work.
+
+### Compile Protobuf
+```
+cd /app && \
+  protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --experimental_allow_proto3_optional service/service.proto
+```
+
+### Run the server
+```
+cd /app/server && \
+  go run .
+```
+
+### Run the client
+```
+cd /app/client && \
+  go run .
+```
