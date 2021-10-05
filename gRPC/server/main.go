@@ -16,6 +16,7 @@ type gRPCServer struct {
 }
 
 func (g *gRPCServer) NewCourse(ctx context.Context, in *emptypb.Empty) (*pb.CourseReply, error) {
+	log.Println("NewCourse() call recieved.")
 	reply := pb.CourseReply{
 		ReplyType:        pb.CourseReply_OK,
 		Id:               0,
@@ -28,6 +29,7 @@ func (g *gRPCServer) NewCourse(ctx context.Context, in *emptypb.Empty) (*pb.Cour
 }
 
 func (g *gRPCServer) GetCourse(ctx context.Context, in *pb.CourseRequest) (*pb.CourseReply, error) {
+	log.Println("GetCourse() call recieved.")
 	reply := pb.CourseReply{
 		ReplyType:        pb.CourseReply_OK,
 		Id:               *in.CourseId,
@@ -40,7 +42,7 @@ func (g *gRPCServer) GetCourse(ctx context.Context, in *pb.CourseRequest) (*pb.C
 }
 
 func (g *gRPCServer) DeleteCourse(ctx context.Context, in *pb.CourseRequest) (*pb.CourseReply, error) {
-	// Assume that we're deleting dont check the course request action enum
+	log.Println("DeleteCourse() call recieved.")
 	reply := pb.CourseReply{
 		ReplyType:        pb.CourseReply_OK,
 		Id:               *in.CourseId,
@@ -53,6 +55,7 @@ func (g *gRPCServer) DeleteCourse(ctx context.Context, in *pb.CourseRequest) (*p
 }
 
 func (g *gRPCServer) EditCourse(ctx context.Context, in *pb.CourseRequest) (*pb.CourseReply, error) {
+	log.Println("EditCourse() call recieved.")
 	dto := *in.NewCourseState
 
 	reply := pb.CourseReply{
