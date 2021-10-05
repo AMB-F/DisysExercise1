@@ -89,9 +89,9 @@ docker build -t gogrpc .
 To spin up the container, run:
 ```bash
 # unix
-docker run -it --rm -v "$(pwd)":/app gogrpc bash
+docker run -it --rm -v "$(pwd)":/app --network="host" gogrpc bash
 # windows
-docker run -it --rm -v ${pwd}:/app gogrpc bash
+docker run -it --rm -v ${pwd}:/app --network="host" gogrpc bash
 ```
 This assumes that you are in the `gRPC` folder! Note, if your path has spaces, it may very well not work.
 
